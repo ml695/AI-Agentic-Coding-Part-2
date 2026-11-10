@@ -22,8 +22,7 @@ public class Game
         // Initialize Messages with selected language (per sequence diagram)
 
         Messages messages = new Messages();
-        messages.SetCurrentLanguage(selectedLanguage);
-        messages.ReadDictionary();
+        messages.SetCurrentLanguage(selectedLanguage); // also loads that language's text
         // Display welcome message
         Console.WriteLine();
         Console.WriteLine(messages.GetMessage("welcome"));
