@@ -161,6 +161,81 @@ public class MessagesTests
         }
     }
 
+    // --- Italian ---
+
+    [TestMethod]
+    public void ReadDictionary_LoadsItalianWelcomeMessage()
+    {
+        Messages messages = new Messages();
+        messages.SetCurrentLanguage("Italian");
+        Assert.AreEqual("Italian", messages.CurrentLanguage);
+        Assert.AreEqual("Benvenuto nel Gioco Scegli la Tua Avventura", messages.GetMessage("welcome"));
+        Assert.AreEqual("Arrivederci!", messages.GetMessage("goodbye"));
+    }
+
+    [TestMethod]
+    public void ReadDictionary_AllRequiredKeysExistInItalian()
+    {
+        Messages messages = new Messages();
+        messages.SetCurrentLanguage("Italian");
+
+        string[] requiredKeys = { "welcome", "menu",
+                                   "choose_path", "path_north", "path_south", "attack_prompt",
+                                   "victory", "defeat", "retreat", "invalid", "goodbye" };
+
+        foreach (string key in requiredKeys)
+        {
+            string result = messages.GetMessage(key);
+            Assert.AreNotEqual($"[{key}]", result, $"Key '{key}' is missing from Italian dictionary.");
+        }
+    }
+
+    [TestMethod]
+    public void Italian_RaceAndOccupationInput_NormalizeAndTranslate()
+    {
+        Messages messages = new Messages();
+        messages.SetCurrentLanguage("Italian");
+
+        Assert.IsTrue(messages.IsValidRace("Mezzuomo"));
+        Assert.AreEqual("Halfling", messages.NormalizeRace("mezzuomo"));
+        Assert.AreEqual("Nano", messages.TranslateRaceForDisplay("Dwarf"));
+
+        Assert.IsTrue(messages.IsValidOccupation("ARCIERE"));
+        Assert.AreEqual("Archer", messages.NormalizeOccupation("arciere"));
+        Assert.AreEqual("Ladro", messages.TranslateOccupationForDisplay("Thief"));
+
+        Assert.AreEqual("spada lunga", messages.TranslateWeaponForDisplay("long sword"));
+    }
+
+    [TestMethod]
+    public void EveryLanguage_HasEveryEnglishKey()
+    {
+        string jsonPath = Path.Combine(AppContext.BaseDirectory, "language_data.json");
+        using var doc = System.Text.Json.JsonDocument.Parse(File.ReadAllText(jsonPath));
+        var root = doc.RootElement;
+        var english = root.GetProperty("English");
+
+        foreach (var language in root.EnumerateObject())
+        {
+            foreach (var section in english.EnumerateObject())
+            {
+                Assert.IsTrue(language.Value.TryGetProperty(section.Name, out var other),
+                    $"{language.Name} is missing section '{section.Name}'.");
+
+                // Input maps are keyed by words in each language, so compare their canonical values.
+                bool isInputMap = section.Name is "raceMap" or "occupationMap";
+                var expected = section.Value.EnumerateObject()
+                    .Select(p => isInputMap ? p.Value.GetString()! : p.Name).ToHashSet();
+                var actual = other.EnumerateObject()
+                    .Select(p => isInputMap ? p.Value.GetString()! : p.Name).ToHashSet();
+
+                var missing = expected.Except(actual).ToList();
+                Assert.AreEqual(0, missing.Count,
+                    $"{language.Name}.{section.Name} is missing: {string.Join(", ", missing)}");
+            }
+        }
+    }
+
     // --- IsValidRace ---
 
     [TestMethod]
