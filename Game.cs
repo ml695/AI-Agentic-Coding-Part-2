@@ -50,7 +50,12 @@ public class Game
                     }
                     else if (selectedPath == "south")
                     {
+                        // The south story is an ending ("...return home, poor, and still bored"),
+                        // so finish the game instead of asking for a path again.
+                        Console.WriteLine();
                         Console.WriteLine(messages.GetMessage("south_path_narrative"));
+                        running = false;
+                        inAdventureMenu = false;
                     }
                     else if (selectedPath == "north")
                     {
