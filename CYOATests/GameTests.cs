@@ -73,6 +73,35 @@ public class GameTests
         game.EndGame(false, true, GetMessages("French"));
     }
 
+    // --- ParseLanguageChoice ---
+
+    [TestMethod]
+    [DataRow("4", "Italian")]
+    [DataRow("Italiano", "Italian")]
+    [DataRow("  ITALIANO ", "Italian")]
+    [DataRow("italian", "Italian")]
+    [DataRow("1", "English")]
+    [DataRow("English", "English")]
+    [DataRow("2", "Spanish")]
+    [DataRow("Espanol", "Spanish")]
+    [DataRow("Español", "Spanish")]
+    [DataRow("3", "French")]
+    [DataRow("Francais", "French")]
+    public void ParseLanguageChoice_AcceptsNumberOrName(string input, string expected)
+    {
+        Assert.AreEqual(expected, Game.ParseLanguageChoice(input));
+    }
+
+    [TestMethod]
+    [DataRow("5")]
+    [DataRow("german")]
+    [DataRow("")]
+    [DataRow(null)]
+    public void ParseLanguageChoice_ReturnsNull_ForUnknownInput(string? input)
+    {
+        Assert.IsNull(Game.ParseLanguageChoice(input));
+    }
+
     // --- IsValidMenuChoice ---
 
     [TestMethod]

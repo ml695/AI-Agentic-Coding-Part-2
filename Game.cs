@@ -13,17 +13,7 @@ public class Game
         Dragon dragon = new Dragon(die);
 
         // Language selection shown before Messages dictionary is loaded
-        Console.WriteLine("Select language / Selecciona idioma / Choisissez la langue / Seleziona la lingua:");
-        Console.WriteLine("1. English  2. Espanol  3. Francais  4. Italiano");
-        Console.Write("Enter choice: ");
-        string? langInput = Console.ReadLine()?.Trim();
-        string selectedLanguage = langInput switch
-        {
-            "2" => "Spanish",
-            "3" => "French",
-            "4" => "Italian",
-            _ => "English"
-        };
+        string selectedLanguage = PromptForLanguage();
 
         // Initialize Messages with selected language (per sequence diagram)
 
@@ -91,6 +81,43 @@ public class Game
             Console.WriteLine(messages.GetMessage("victory"));
         else
             Console.WriteLine(messages.GetMessage("defeat"));
+    }
+
+    /// <summary>
+    /// Maps a language-menu answer to a language name in language_data.json.
+    /// Accepts the menu number or the language's name (any case); returns null if unrecognized.
+    /// </summary>
+    public static string? ParseLanguageChoice(string? input)
+    {
+        return input?.Trim().ToLowerInvariant() switch
+        {
+            "1" or "english" or "en" => "English",
+            "2" or "espanol" or "español" or "spanish" or "es" => "Spanish",
+            "3" or "francais" or "français" or "french" or "fr" => "French",
+            "4" or "italiano" or "italian" or "it" => "Italian",
+            _ => null
+        };
+    }
+
+    // Shown before the Messages dictionary is loaded, so this text is multilingual and hard-coded.
+    private static string PromptForLanguage()
+    {
+        while (true)
+        {
+            Console.WriteLine("Select language / Selecciona idioma / Choisissez la langue / Seleziona la lingua:");
+            Console.WriteLine("1. English  2. Espanol  3. Francais  4. Italiano");
+            Console.Write("Enter choice: ");
+            string? input = Console.ReadLine();
+
+            if (input == null)          // end of input (e.g. piped/closed stdin): don't loop forever
+                return "English";
+
+            string? language = ParseLanguageChoice(input);
+            if (language != null)
+                return language;
+
+            Console.WriteLine("Invalid choice / Opcion no valida / Choix invalide / Scelta non valida.\n");
+        }
     }
 
     public bool IsValidMenuChoice(string? input)
