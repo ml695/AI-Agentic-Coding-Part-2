@@ -125,10 +125,11 @@ public class Player
             Agility += _die.Roll(4);
     }
 
+    // A Halfling's negative Strength modifier could push HP to 0 or below, so HP is at least 1.
     private void RollHealthPoints(Messages messages, int strengthModifier)
     {
         PromptRoll(messages.GetMessage("roll_health"), messages);
-        HealthPoints = _die.Roll(20) + strengthModifier;
+        HealthPoints = Math.Max(1, _die.Roll(20) + strengthModifier);
     }
 
     // Gold is d20 x 10, giving 10-200.
