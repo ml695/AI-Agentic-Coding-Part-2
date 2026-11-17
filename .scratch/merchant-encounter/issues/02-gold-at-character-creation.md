@@ -6,9 +6,9 @@
 
 **Status:** ready-for-agent
 
-- [ ] A fourth roll prompt for Gold appears after the Health Points roll; anything other than `roll` is rejected and asked again, like the other roll prompts.
-- [ ] Gold is d20 × 10 (verified with a fixed dice roller, e.g. a roll of 7 gives 70 Gold).
-- [ ] The stats summary shows a Gold line with the player's current Gold.
-- [ ] The new message keys exist in all four languages (the key-parity test passes).
-- [ ] Existing full-game test scripts are updated for the extra roll step and still pass.
-- [ ] **Gold** is defined in `GLOSSARY.md`.
+- [x] A fourth roll prompt for Gold appears after the Health Points roll; anything other than `roll` is rejected and asked again, like the other roll prompts.
+- [x] Gold is d20 × 10 (verified with a fixed dice roller, e.g. a roll of 7 gives 70 Gold).
+- [x] The stats summary shows a Gold line with the player's current Gold.
+- [x] The new message keys exist in all four languages (the key-parity test passes).
+- [x] Existing full-game test scripts are updated for the extra roll step and still pass.
+- [x] **Gold** is defined in `GLOSSARY.md`.

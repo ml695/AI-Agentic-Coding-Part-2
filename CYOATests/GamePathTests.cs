@@ -21,8 +21,9 @@ public class GamePathTests
         if (_originalOut != null) Console.SetOut(_originalOut);
     }
 
-    // language, main menu, race, name, occupation, three rolls, "proceed on an adventure"
-    private const string CreateCharacterInput = "1\n1\nhuman\nBob\nfighter\nroll\nroll\nroll\n2\n";
+    // language, main menu, race, name, occupation, four rolls (strength, agility, health, gold),
+    // "proceed on an adventure"
+    private const string CreateCharacterInput = "1\n1\nhuman\nBob\nfighter\nroll\nroll\nroll\nroll\n2\n";
 
     private static string PlayGame(string input, Die? die = null)
     {
@@ -74,8 +75,8 @@ public class GamePathTests
     {
         Messages messages = English();
         // Dragon: strength, agility, health. Player (Human): strength d20, strength modifier d4,
-        // agility d20, health d20. Humans add the modifier to strength and health.
-        var die = new FixedDie(5, 6, 7, 15, 3, 12, 9);
+        // agility d20, health d20, gold d20. Humans add the modifier to strength and health.
+        var die = new FixedDie(5, 6, 7, 15, 3, 12, 9, 4);
 
         // CreateCharacterInput ends with "2" (proceed), so list stats ("1") first: replace that last line.
         string input = CreateCharacterInput[..^2] + "1\n2\ne\n";
@@ -84,6 +85,34 @@ public class GamePathTests
         StringAssert.Contains(output, messages.GetMessage("stats_strength") + 18 + Environment.NewLine); // 15 + 3
         StringAssert.Contains(output, messages.GetMessage("stats_agility") + 12 + Environment.NewLine);
         StringAssert.Contains(output, messages.GetMessage("stats_health") + 12 + Environment.NewLine);   // 9 + 3
+    }
+
+    [TestMethod]
+    public void GoldRoll_IsD20TimesTen_AndShownInStats()
+    {
+        Messages messages = English();
+        // Dragon: strength, agility, health. Player: strength, modifier, agility, health, gold.
+        var die = new FixedDie(5, 6, 7, 15, 3, 12, 9, 7);
+
+        string input = CreateCharacterInput[..^2] + "1\n2\ne\n";
+        string output = PlayGame(input, die);
+
+        StringAssert.Contains(output, messages.GetMessage("roll_gold"));
+        StringAssert.Contains(output, messages.GetMessage("stats_gold") + 70 + Environment.NewLine);
+    }
+
+    [TestMethod]
+    public void GoldRoll_RejectsAnythingButRoll_AndAsksAgain()
+    {
+        Messages messages = English();
+
+        // Strength, agility and health rolls, then a typo at the gold prompt before "roll".
+        string input = "1\n1\nhuman\nBob\nfighter\nroll\nroll\nroll\ngold\nroll\n2\ne\n";
+        string output = PlayGame(input);
+
+        Assert.AreEqual(2, CountOccurrences(output, messages.GetMessage("roll_gold")),
+            "The gold prompt should be asked again after invalid input.");
+        StringAssert.Contains(output, messages.GetMessage("roll_invalid"));
     }
 
     [TestMethod]
