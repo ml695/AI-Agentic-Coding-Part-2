@@ -55,12 +55,8 @@ public class Game
                     }
                     else if (selectedPath == "south")
                     {
-                        // The south story is an ending ("...return home, poor, and still bored"),
-                        // so finish the game instead of asking for a path again.
-                        Console.WriteLine();
-                        Console.WriteLine(messages.GetMessage("south_path_narrative"));
-                        running = false;
-                        inAdventureMenu = false;
+                        // After the Merchant, the player is back at the path choice.
+                        new Merchant().Visit(player, messages);
                     }
                     else if (selectedPath == "north")
                     {
@@ -161,6 +157,9 @@ public class Game
             Console.WriteLine(messages.GetMessage("path_prompt_full"));
             Console.Write(messages.GetMessage("enter_choice"));
             string? input = Console.ReadLine()?.Trim().ToLower();
+
+            if (input == null)          // end of input: exit instead of asking forever
+                return "exit";
 
             if (input == "north" || input == "n")
                 return "north";

@@ -6,13 +6,20 @@
 
 **Status:** ready-for-agent
 
-- [ ] Going south shows the Merchant greeting, both items with their effects and prices, and the player's Gold.
-- [ ] Choosing `3` buys nothing, leaves Gold unchanged, and returns to the path choice.
-- [ ] Invalid input at the Merchant shows an invalid-choice message and asks again.
-- [ ] If console input runs out during the visit, it is treated as leaving and the game ends without looping (5-second timeout test pattern).
-- [ ] Going south, leaving, then north reaches the dragon encounter.
-- [ ] Going south, leaving, then exit ends the game normally.
-- [ ] Going north without visiting the Merchant works exactly as before.
-- [ ] The existing "south path ends the game" test is changed to assert the return to the path choice.
-- [ ] New message keys exist in all four languages (the key-parity test passes).
-- [ ] **Merchant**, **Magical Armor** and **Magical Weapon** are defined in `GLOSSARY.md`.
+- [x] Going south shows the Merchant greeting, both items with their effects and prices, and the player's Gold.
+- [x] Choosing `3` buys nothing, leaves Gold unchanged, and returns to the path choice.
+- [x] Invalid input at the Merchant shows an invalid-choice message and asks again.
+- [x] If console input runs out during the visit, it is treated as leaving and the game ends without looping (5-second timeout test pattern).
+- [x] Going south, leaving, then north reaches the dragon encounter.
+- [x] Going south, leaving, then exit ends the game normally.
+- [x] Going north without visiting the Merchant works exactly as before.
+- [x] The existing "south path ends the game" test is changed to assert the return to the path choice.
+- [x] New message keys exist in all four languages (the key-parity test passes).
+- [x] **Merchant**, **Magical Armor** and **Magical Weapon** are defined in `GLOSSARY.md`.
+
+## Comments
+
+- Implemented. `Merchant.cs` runs one visit; choosing `1` or `2` shows a "not ready yet"
+  message and asks again until tickets 04/05 add buying. The unused `south_path_narrative`
+  key was removed. End of input at the path prompt now counts as exit (needed so input
+  running out at the Merchant ends the game).

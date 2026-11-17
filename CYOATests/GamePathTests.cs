@@ -58,16 +58,116 @@ public class GamePathTests
         return count;
     }
 
+    // Dragon: strength, agility, health. Player (Human): strength, modifier, agility, health, gold.
+    // The last roll (9) gives 90 Gold.
+    private static FixedDie DiceWith90Gold() => new FixedDie(5, 6, 7, 15, 3, 12, 9, 9);
+
     [TestMethod]
-    public void SouthPath_ShowsNarrativeAndEndsGame()
+    public void SouthPath_ShowsMerchantWithBothItemsPricesAndGold()
     {
         Messages messages = English();
 
-        string output = PlayGame(CreateCharacterInput + "s\n");
+        string output = PlayGame(CreateCharacterInput + "s\n3\ne\n", DiceWith90Gold());
 
-        StringAssert.Contains(output, messages.GetMessage("south_path_narrative"));
-        Assert.AreEqual(1, CountOccurrences(output, messages.GetMessage("path_prompt_full")),
-            "The path question should not be asked again after taking the south path.");
+        StringAssert.Contains(output, messages.GetMessage("merchant_greeting"));
+        StringAssert.Contains(output, "1. Magical Armor (80 Gold): reduces the damage of each dragon hit by 3.");
+        StringAssert.Contains(output, "2. Magical Weapon (120 Gold): adds 4 to your weapon's Maximum Damage.");
+        StringAssert.Contains(output, messages.GetMessage("merchant_leave_option"));
+        StringAssert.Contains(output, "You have 90 Gold.");
+    }
+
+    [TestMethod]
+    public void SouthPath_LeavingTheMerchant_KeepsGoldAndReturnsToPathChoice()
+    {
+        Messages messages = English();
+
+        // South, leave, south again, leave, exit. The second visit shows whether Gold changed.
+        string output = PlayGame(CreateCharacterInput + "s\n3\ns\n3\ne\n", DiceWith90Gold());
+
+        StringAssert.Contains(output, messages.GetMessage("merchant_farewell"));
+        Assert.AreEqual(3, CountOccurrences(output, messages.GetMessage("path_prompt_full")),
+            "The path question should be asked again after each visit to the Merchant.");
+        Assert.AreEqual(2, CountOccurrences(output, "You have 90 Gold."),
+            "Leaving the Merchant should not change the player's Gold.");
+        StringAssert.Contains(output, messages.GetMessage("adventure_ends"));
+    }
+
+    [TestMethod]
+    public void Merchant_RejectsInvalidChoice_AndAsksAgain()
+    {
+        Messages messages = English();
+
+        string output = PlayGame(CreateCharacterInput + "s\n9\n3\ne\n", DiceWith90Gold());
+
+        StringAssert.Contains(output, messages.GetMessage("merchant_invalid"));
+        Assert.AreEqual(2, CountOccurrences(output, messages.GetMessage("merchant_leave_option")),
+            "The Merchant menu should be shown again after invalid input.");
+        StringAssert.Contains(output, messages.GetMessage("merchant_farewell"));
+    }
+
+    [TestMethod]
+    public void Merchant_BuyingIsNotAvailableYet_AndAsksAgain()
+    {
+        Messages messages = English();
+
+        string output = PlayGame(CreateCharacterInput + "s\n1\n2\n3\ne\n", DiceWith90Gold());
+
+        Assert.AreEqual(2, CountOccurrences(output, messages.GetMessage("merchant_not_available")));
+        // The menu is shown three times (before 1, 2 and 3), each with unchanged Gold.
+        Assert.AreEqual(3, CountOccurrences(output, "You have 90 Gold."),
+            "Choosing an item that isn't available yet should not change the player's Gold.");
+        StringAssert.Contains(output, messages.GetMessage("merchant_farewell"));
+    }
+
+    [TestMethod]
+    public void SouthPath_LeaveThenExit_EndsGameNormally()
+    {
+        Messages messages = English();
+
+        string output = PlayGame(CreateCharacterInput + "s\n3\ne\n", DiceWith90Gold());
+
+        StringAssert.Contains(output, messages.GetMessage("merchant_farewell"));
+        StringAssert.Contains(output, messages.GetMessage("adventure_ends"));
+    }
+
+    [TestMethod]
+    public void Merchant_InputRunningOut_CountsAsLeaving_AndGameEnds()
+    {
+        Messages messages = English();
+
+        // The script stops while the Merchant is waiting for a choice; PlayGame's timeout
+        // fails the test if the game loops instead of ending.
+        string output = PlayGame(CreateCharacterInput + "s\n", DiceWith90Gold());
+
+        StringAssert.Contains(output, messages.GetMessage("merchant_farewell"));
+        StringAssert.Contains(output, messages.GetMessage("adventure_ends"));
+    }
+
+    [TestMethod]
+    public void SouthPath_LeaveThenNorth_ReachesTheDragon()
+    {
+        Messages messages = English();
+
+        // South, leave, north, then retreat from the dragon.
+        string output = PlayGame(CreateCharacterInput + "s\n3\nn\nr\n", DiceWith90Gold());
+
+        StringAssert.Contains(output, messages.GetMessage("merchant_farewell"));
+        StringAssert.Contains(output, messages.GetMessage("north_path_narrative"));
+        StringAssert.Contains(output, messages.GetMessage("dragon_encounter_prompt"));
+        StringAssert.Contains(output, messages.GetMessage("retreat"));
+    }
+
+    [TestMethod]
+    public void NorthPath_WithoutVisitingMerchant_ReachesTheDragon()
+    {
+        Messages messages = English();
+
+        string output = PlayGame(CreateCharacterInput + "n\nr\n", DiceWith90Gold());
+
+        Assert.IsFalse(output.Contains(messages.GetMessage("merchant_greeting")),
+            "The Merchant should only appear on the south path.");
+        StringAssert.Contains(output, messages.GetMessage("north_path_narrative"));
+        StringAssert.Contains(output, messages.GetMessage("retreat"));
     }
 
     [TestMethod]
