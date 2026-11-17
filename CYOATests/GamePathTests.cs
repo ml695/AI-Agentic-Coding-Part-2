@@ -106,16 +106,47 @@ public class GamePathTests
     }
 
     [TestMethod]
-    public void Merchant_BuyingIsNotAvailableYet_AndAsksAgain()
+    public void Merchant_WeaponIsNotAvailableYet_AndAsksAgain()
     {
         Messages messages = English();
 
-        string output = PlayGame(CreateCharacterInput + "s\n1\n2\n3\ne\n", DiceWith90Gold());
+        string output = PlayGame(CreateCharacterInput + "s\n2\n3\ne\n", DiceWith90Gold());
 
-        Assert.AreEqual(2, CountOccurrences(output, messages.GetMessage("merchant_not_available")));
-        // The menu is shown three times (before 1, 2 and 3), each with unchanged Gold.
-        Assert.AreEqual(3, CountOccurrences(output, "You have 90 Gold."),
+        Assert.AreEqual(1, CountOccurrences(output, messages.GetMessage("merchant_not_available")));
+        // The menu is shown twice (before 2 and 3), each with unchanged Gold.
+        Assert.AreEqual(2, CountOccurrences(output, "You have 90 Gold."),
             "Choosing an item that isn't available yet should not change the player's Gold.");
+        StringAssert.Contains(output, messages.GetMessage("merchant_farewell"));
+    }
+
+    [TestMethod]
+    public void BuyingArmor_WithEnoughGold_Deducts80_AndReturnsToPathChoice()
+    {
+        Messages messages = English();
+
+        // South, buy armor (ends the visit), south again to see the Gold, leave, exit.
+        string output = PlayGame(CreateCharacterInput + "s\n1\ns\n3\ne\n", DiceWith90Gold());
+
+        StringAssert.Contains(output, messages.GetMessage("merchant_armor_bought"));
+        Assert.AreEqual(3, CountOccurrences(output, messages.GetMessage("path_prompt_full")),
+            "Buying should end the visit and return to the path choice.");
+        StringAssert.Contains(output, "You have 10 Gold."); // 90 - 80
+        StringAssert.Contains(output, messages.GetMessage("adventure_ends"));
+    }
+
+    [TestMethod]
+    public void BuyingArmor_WithoutEnoughGold_ShowsCantAfford_KeepsGold_AndAsksAgain()
+    {
+        Messages messages = English();
+        // The last roll (7) gives 70 Gold, less than the armor's 80.
+        var die = new FixedDie(5, 6, 7, 15, 3, 12, 9, 7);
+
+        string output = PlayGame(CreateCharacterInput + "s\n1\n3\ne\n", die);
+
+        StringAssert.Contains(output, "The Merchant shakes their head. 'That costs 80 Gold, and you only have 70.'");
+        Assert.AreEqual(2, CountOccurrences(output, "You have 70 Gold."),
+            "A failed purchase should leave Gold unchanged and show the menu again.");
+        Assert.IsFalse(output.Contains(messages.GetMessage("merchant_armor_bought")));
         StringAssert.Contains(output, messages.GetMessage("merchant_farewell"));
     }
 
@@ -213,6 +244,55 @@ public class GamePathTests
         Assert.AreEqual(2, CountOccurrences(output, messages.GetMessage("roll_gold")),
             "The gold prompt should be asked again after invalid input.");
         StringAssert.Contains(output, messages.GetMessage("roll_invalid"));
+    }
+
+    [TestMethod]
+    public void CharacterStats_ShowNoArmor_BeforeBuying()
+    {
+        string input = CreateCharacterInput[..^2] + "1\n2\ne\n";
+        string output = PlayGame(input, DiceWith90Gold());
+
+        StringAssert.Contains(output, "Armor: none" + Environment.NewLine);
+    }
+
+    [TestMethod]
+    public void CharacterStats_ShowTheArmorsName_OnceOwned()
+    {
+        // The game only offers the stats summary before the adventure, so this calls it directly.
+        var output = new StringWriter();
+        Console.SetOut(output);
+        var player = new Player { Name = "Bob", Armor = Armor.Magical() };
+
+        player.DisplayStats(English());
+
+        StringAssert.Contains(output.ToString(), "Armor: Magical Armor" + Environment.NewLine);
+    }
+
+    [TestMethod]
+    public void CombatStats_IncludeTheArmor_AfterBuyingIt()
+    {
+        Messages messages = English();
+        // After character creation (90 Gold): the player's attack roll 20 misses (strength 18),
+        // the dragon's attack roll 20 misses (strength 5); then the player retreats.
+        var die = new FixedDie(5, 6, 7, 15, 3, 12, 9, 9, 20, 20);
+
+        string output = PlayGame(CreateCharacterInput + "s\n1\nn\na\nr\n", die);
+
+        int combatStats = output.IndexOf(messages.GetMessage("combat_stats_header"), StringComparison.Ordinal);
+        Assert.IsTrue(combatStats >= 0, "The combat stats should be shown before the fight.");
+        StringAssert.Contains(output[combatStats..], "Armor: Magical Armor" + Environment.NewLine);
+    }
+
+    [TestMethod]
+    public void CombatStats_ShowNoArmor_WithoutBuying()
+    {
+        Messages messages = English();
+        var die = new FixedDie(5, 6, 7, 15, 3, 12, 9, 9, 20, 20);
+
+        string output = PlayGame(CreateCharacterInput + "n\na\nr\n", die);
+
+        int combatStats = output.IndexOf(messages.GetMessage("combat_stats_header"), StringComparison.Ordinal);
+        StringAssert.Contains(output[combatStats..], "Armor: none" + Environment.NewLine);
     }
 
     [TestMethod]

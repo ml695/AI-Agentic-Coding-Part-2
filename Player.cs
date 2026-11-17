@@ -19,6 +19,9 @@ public class Player
 
     public Weapon? Weapon { get; set; }
 
+    // Null until the player buys Magical Armor from the Merchant.
+    public Armor? Armor { get; set; }
+
     public void CreateCharacter(Messages messages)
     {
         Race = PromptForRace(messages);
@@ -161,12 +164,23 @@ public class Player
         Console.WriteLine(messages.GetMessage("stats_agility") + Agility);
         Console.WriteLine(messages.GetMessage("stats_health") + HealthPoints);
         Console.WriteLine(messages.GetMessage("stats_gold") + Gold);
+        Console.WriteLine(GetArmorStatLine(messages));
 
         if (Weapon != null)
         {
             Console.WriteLine(messages.GetMessage("stats_weapon") + messages.TranslateWeaponForDisplay(Weapon.Type));
             Console.WriteLine(messages.GetMessage("stats_damage") + Weapon.MaxDamage);
         }
+    }
+
+    // "Armor: none" or "Armor: <armor's name>"; shared by the character and combat stats.
+    public string GetArmorStatLine(Messages messages)
+    {
+        string armor = Armor == null
+            ? messages.GetMessage("stats_armor_none")
+            : messages.TranslateArmorForDisplay(Armor.Type);
+
+        return messages.GetMessage("stats_armor") + armor;
     }
 
     public int RollAttack()

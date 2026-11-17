@@ -126,6 +126,53 @@ public class DragonTests
     }
 
     [TestMethod]
+    public void Attack_WithArmor_UnblockedHitDealsThreeLessDamage_AndReportsAbsorbed()
+    {
+        // Dragon stats: strength 15, agility 10, health 10.
+        // Attack roll 5 hits, block roll 18 fails (agility 10), damage roll 7; armor absorbs 3.
+        var die = new FixedDie(15, 10, 10, 5, 18, 7);
+        Dragon dragon = new Dragon(die);
+        Player player = new Player { Name = "TestHero", Agility = 10, HealthPoints = 30, Armor = Armor.Magical() };
+        Messages messages = GetMessages();
+
+        string result = dragon.Attack(player, messages);
+
+        Assert.AreEqual(26, player.HealthPoints);
+        StringAssert.Contains(result, "Smolderfang deals 4 damage.");
+        StringAssert.Contains(result, "Your armor absorbs 3 damage.");
+    }
+
+    [TestMethod]
+    public void Attack_WithArmor_HitSmallerThanProtectionDealsZero_NotHealing()
+    {
+        // Attack roll 5 hits, block roll 18 fails, damage roll 2; armor absorbs all 2.
+        var die = new FixedDie(15, 10, 10, 5, 18, 2);
+        Dragon dragon = new Dragon(die);
+        Player player = new Player { Name = "TestHero", Agility = 10, HealthPoints = 30, Armor = Armor.Magical() };
+        Messages messages = GetMessages();
+
+        string result = dragon.Attack(player, messages);
+
+        Assert.AreEqual(30, player.HealthPoints);
+        StringAssert.Contains(result, "Smolderfang deals 0 damage.");
+        StringAssert.Contains(result, "Your armor absorbs 2 damage.");
+    }
+
+    [TestMethod]
+    public void Attack_WithoutArmor_DamageIsUnchanged_AndNoAbsorbedMessage()
+    {
+        var die = new FixedDie(15, 10, 10, 5, 18, 7);
+        Dragon dragon = new Dragon(die);
+        Player player = new Player { Name = "TestHero", Agility = 10, HealthPoints = 30 };
+        Messages messages = GetMessages();
+
+        string result = dragon.Attack(player, messages);
+
+        Assert.AreEqual(23, player.HealthPoints);
+        Assert.IsFalse(result.Contains("absorbs"), "Without armor, no absorbed-damage message should appear.");
+    }
+
+    [TestMethod]
     public void Attack_KeepsPlayerHealthNonNegative()
     {
         Die die = new Die();

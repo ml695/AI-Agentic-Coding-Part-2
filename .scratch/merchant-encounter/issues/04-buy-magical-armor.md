@@ -6,10 +6,10 @@
 
 **Status:** ready-for-agent
 
-- [ ] Buying armor with enough Gold deducts 80 Gold and returns to the path choice.
-- [ ] Trying to buy armor without enough Gold shows the can't-afford message, leaves Gold unchanged, and asks again.
-- [ ] The character stats show the armor ("none" before buying, the armor's name after).
-- [ ] The combat stats shown before the fight include the armor.
-- [ ] With armor, an unblocked dragon hit deals its damage minus 3, never below 0, and the absorbed-damage message appears (tested through the dragon's attack with fixed dice).
-- [ ] Without armor, dragon damage is unchanged (regression test).
-- [ ] New message keys and armor display names exist in all four languages (the key-parity test passes).
+- [x] Buying armor with enough Gold deducts 80 Gold and returns to the path choice.
+- [x] Trying to buy armor without enough Gold shows the can't-afford message, leaves Gold unchanged, and asks again.
+- [x] The character stats show the armor ("none" before buying, the armor's name after).
+- [x] The combat stats shown before the fight include the armor.
+- [x] With armor, an unblocked dragon hit deals its damage minus 3, never below 0, and the absorbed-damage message appears (tested through the dragon's attack with fixed dice).
+- [x] Without armor, dragon damage is unchanged (regression test).
+- [x] New message keys and armor display names exist in all four languages (the key-parity test passes).

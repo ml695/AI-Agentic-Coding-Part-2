@@ -35,6 +35,8 @@
       "stats_agility": "Agility: ",
       "stats_health": "Health Points: ",
       "stats_gold": "Gold: ",
+      "stats_armor": "Armor: ",
+      "stats_armor_none": "none",
       "stats_weapon": "Weapon: ",
       "stats_damage": "Weapon's Maximum Damage Points: ",
       "adventure_ends": "Adventure ends. Bye.",
@@ -47,6 +49,8 @@
       "merchant_your_gold": "You have {0} Gold.",
       "merchant_invalid": "Invalid choice. Please enter '1', '2' or '3'.",
       "merchant_not_available": "The Merchant says 'That item is not ready yet. Come back another time.'",
+      "merchant_armor_bought": "You pay the Merchant and put on the Magical Armor. It hums softly as it settles on your shoulders. You walk back to where the paths meet.",
+      "merchant_cannot_afford": "The Merchant shakes their head. 'That costs {0} Gold, and you only have {1}.'",
       "merchant_farewell": "The Merchant waves goodbye. You walk back to where the paths meet.",
       "north_path_narrative": "You take the North path. After walking for hours, the air grows colder, and the trees become more sparse. You are confronted with a dragon. The dragon has a hoard of gold behind it.",
       "dragon_intro": "The dragon says 'I am {0}. Leave or perish!'",
@@ -68,6 +72,7 @@
       "dragon_hit_player": "{0} hits {1}.",
       "player_defended_dragon_attack": "{0} successfully defends the attack.",
       "dragon_damage_dealt": "{0} deals {1} damage.",
+      "armor_absorbed": "Your armor absorbs {0} damage.",
       "player_health_now": "{0}'s health points are now {1}.",
       "player_defeated_narrative": "{0} has been defeated.",
       "dragon_defense_taunt_1": "Missed me, breath of a gnat!",
@@ -110,6 +115,9 @@
       "dagger": "dagger",
       "long bow": "long bow",
       "claws": "claws"
+    },
+    "displayArmorMap": {
+      "magical armor": "Magical Armor"
     }
   },
   "Spanish": {
@@ -148,6 +156,8 @@
       "stats_agility": "Agilidad: ",
       "stats_health": "Puntos de Vida: ",
       "stats_gold": "Oro: ",
+      "stats_armor": "Armadura: ",
+      "stats_armor_none": "ninguna",
       "stats_weapon": "Arma: ",
       "stats_damage": "Puntos Maximos de Dano del Arma: ",
       "adventure_ends": "La aventura termina. Adios.",
@@ -160,6 +170,8 @@
       "merchant_your_gold": "Tienes {0} de Oro.",
       "merchant_invalid": "Opcion invalida. Por favor escribe '1', '2' o '3'.",
       "merchant_not_available": "El Mercader dice 'Ese objeto todavia no esta listo. Vuelve en otro momento.'",
+      "merchant_armor_bought": "Pagas al Mercader y te pones la Armadura Magica. Zumba suavemente al ajustarse a tus hombros. Regresas al lugar donde se cruzan los caminos.",
+      "merchant_cannot_afford": "El Mercader niega con la cabeza. 'Eso cuesta {0} de Oro, y solo tienes {1}.'",
       "merchant_farewell": "El Mercader se despide. Regresas al lugar donde se cruzan los caminos.",
       "north_path_narrative": "Tomas el camino del norte. Despues de caminar durante horas, el aire se vuelve mas frio y los arboles mas escasos. Te enfrentas a un dragon. El dragon tiene una horda de oro detras de el.",
       "dragon_intro": "El dragon dice 'Soy {0}. Vete o perece!'",
@@ -181,6 +193,7 @@
       "dragon_hit_player": "{0} golpea a {1}.",
       "player_defended_dragon_attack": "{0} defendio exitosamente el ataque.",
       "dragon_damage_dealt": "{0} hace {1} de dano.",
+      "armor_absorbed": "Tu armadura absorbe {0} de dano.",
       "player_health_now": "Los puntos de vida de {0} ahora son {1}.",
       "player_defeated_narrative": "{0} ha sido derrotado.",
       "dragon_defense_taunt_1": "Ni me tocaste, aliento de mosquito!",
@@ -223,6 +236,9 @@
       "dagger": "daga",
       "long bow": "arco largo",
       "claws": "garras"
+    },
+    "displayArmorMap": {
+      "magical armor": "Armadura Magica"
     }
   },
   "French": {
@@ -261,6 +277,8 @@
       "stats_agility": "Agilite: ",
       "stats_health": "Points de Vie: ",
       "stats_gold": "Or: ",
+      "stats_armor": "Armure: ",
+      "stats_armor_none": "aucune",
       "stats_weapon": "Arme: ",
       "stats_damage": "Points de Dommages Maximum: ",
       "adventure_ends": "L'aventure se termine. Au revoir.",
@@ -273,6 +291,8 @@
       "merchant_your_gold": "Vous avez {0} pieces d'or.",
       "merchant_invalid": "Choix invalide. Veuillez taper '1', '2' ou '3'.",
       "merchant_not_available": "Le Marchand dit 'Cet objet n'est pas encore pret. Revenez une autre fois.'",
+      "merchant_armor_bought": "Vous payez le Marchand et enfilez l'Armure Magique. Elle bourdonne doucement en se posant sur vos epaules. Vous retournez la ou les chemins se croisent.",
+      "merchant_cannot_afford": "Le Marchand secoue la tete. 'Cela coute {0} pieces d'or, et vous n'en avez que {1}.'",
       "merchant_farewell": "Le Marchand vous salue. Vous retournez la ou les chemins se croisent.",
       "north_path_narrative": "Vous prenez le chemin du nord. Apres avoir marche pendant des heures, l'air devient plus froid et les arbres plus rares. Vous etes confronte a un dragon. Le dragon a un tresor d'or derriere lui.",
       "dragon_intro": "Le dragon dit 'Je suis {0}. Pars ou peris !'",
@@ -294,6 +314,7 @@
       "dragon_hit_player": "{0} touche {1}.",
       "player_defended_dragon_attack": "{0} defend avec succes l'attaque.",
       "dragon_damage_dealt": "{0} inflige {1} degats.",
+      "armor_absorbed": "Votre armure absorbe {0} degats.",
       "player_health_now": "Les points de vie de {0} sont maintenant de {1}.",
       "player_defeated_narrative": "{0} a ete vaincu.",
       "dragon_defense_taunt_1": "Tu m'as rate, souffle de moucheron!",
@@ -336,6 +357,9 @@
       "dagger": "dague",
       "long bow": "arc long",
       "claws": "griffes"
+    },
+    "displayArmorMap": {
+      "magical armor": "Armure Magique"
     }
   },
   "Italian": {
@@ -374,6 +398,8 @@
       "stats_agility": "Agilita: ",
       "stats_health": "Punti Vita: ",
       "stats_gold": "Oro: ",
+      "stats_armor": "Armatura: ",
+      "stats_armor_none": "nessuna",
       "stats_weapon": "Arma: ",
       "stats_damage": "Danno Massimo dell'Arma: ",
       "adventure_ends": "L'avventura finisce. Arrivederci.",
@@ -386,6 +412,8 @@
       "merchant_your_gold": "Hai {0} monete d'oro.",
       "merchant_invalid": "Scelta non valida. Scrivi '1', '2' o '3'.",
       "merchant_not_available": "Il Mercante dice 'Questo oggetto arrivera presto. Torna un'altra volta.'",
+      "merchant_armor_bought": "Paghi il Mercante e indossi l'Armatura Magica. Ronza piano mentre si posa sulle tue spalle. Torni dove i sentieri si incontrano.",
+      "merchant_cannot_afford": "Il Mercante scuote la testa. 'Costa {0} monete d'oro, e tu ne hai solo {1}.'",
       "merchant_farewell": "Il Mercante ti saluta. Torni dove i sentieri si incontrano.",
       "north_path_narrative": "Prendi il sentiero a Nord. Dopo ore di cammino l'aria si raffredda e gli alberi si diradano. Ti trovi davanti a un drago. Dietro di lui brilla un tesoro d'oro.",
       "dragon_intro": "Il drago dice 'Io sono {0}. Vattene o muori!'",
@@ -407,6 +435,7 @@
       "dragon_hit_player": "{0} colpisce {1}.",
       "player_defended_dragon_attack": "{0} para l'attacco.",
       "dragon_damage_dealt": "{0} infligge {1} danni.",
+      "armor_absorbed": "La tua armatura assorbe {0} danni.",
       "player_health_now": "I punti vita di {0} ora sono {1}.",
       "player_defeated_narrative": "{0} cade sconfitto.",
       "dragon_defense_taunt_1": "Mancato, alito di moscerino!",
@@ -449,6 +478,9 @@
       "dagger": "pugnale",
       "long bow": "arco lungo",
       "claws": "artigli"
+    },
+    "displayArmorMap": {
+      "magical armor": "Armatura Magica"
     }
   }
 }

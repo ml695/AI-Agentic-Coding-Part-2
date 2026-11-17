@@ -19,6 +19,7 @@ public class Messages
     private Dictionary<string, string> _displayRaceMap = new(StringComparer.OrdinalIgnoreCase);
     private Dictionary<string, string> _displayOccupationMap = new(StringComparer.OrdinalIgnoreCase);
     private Dictionary<string, string> _displayWeaponMap = new(StringComparer.OrdinalIgnoreCase);
+    private Dictionary<string, string> _displayArmorMap = new(StringComparer.OrdinalIgnoreCase);
 
     public Messages()
     {
@@ -85,6 +86,7 @@ public class Messages
             _displayRaceMap = LoadMap(langSection, "displayRaceMap", StringComparer.OrdinalIgnoreCase);
             _displayOccupationMap = LoadMap(langSection, "displayOccupationMap", StringComparer.OrdinalIgnoreCase);
             _displayWeaponMap = LoadMap(langSection, "displayWeaponMap", StringComparer.OrdinalIgnoreCase);
+            _displayArmorMap = LoadMap(langSection, "displayArmorMap", StringComparer.OrdinalIgnoreCase);
         }
     }
 
@@ -131,6 +133,11 @@ public class Messages
     public string TranslateWeaponForDisplay(string weaponType)
     {
         return _displayWeaponMap.TryGetValue(weaponType, out string? translated) ? translated : weaponType;
+    }
+
+    public string TranslateArmorForDisplay(string armorType)
+    {
+        return _displayArmorMap.TryGetValue(armorType, out string? translated) ? translated : armorType;
     }
 
     private static bool TryGetObject(JsonElement parent, string name, out JsonElement value)
