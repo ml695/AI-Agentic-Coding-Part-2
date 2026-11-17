@@ -135,6 +135,16 @@ public class Messages
         return _displayWeaponMap.TryGetValue(weaponType, out string? translated) ? translated : weaponType;
     }
 
+    /// <summary>
+    /// The weapon's display name: its translated type, wrapped in the language's
+    /// "weapon_magical_format" (e.g. "magical {0}") once the weapon is magical.
+    /// </summary>
+    public string DescribeWeapon(Weapon weapon)
+    {
+        string name = TranslateWeaponForDisplay(weapon.Type);
+        return weapon.IsMagical ? string.Format(GetMessage("weapon_magical_format"), name) : name;
+    }
+
     public string TranslateArmorForDisplay(string armorType)
     {
         return _displayArmorMap.TryGetValue(armorType, out string? translated) ? translated : armorType;

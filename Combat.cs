@@ -61,7 +61,7 @@ public class Combat
 
         if (player.Weapon != null)
         {
-            output.Add(messages.GetMessage("stats_weapon") + messages.TranslateWeaponForDisplay(player.Weapon.Type));
+            output.Add(messages.GetMessage("stats_weapon") + messages.DescribeWeapon(player.Weapon));
             output.Add(messages.GetMessage("stats_damage") + player.Weapon.MaxDamage);
         }
 

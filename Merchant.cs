@@ -42,8 +42,13 @@ public class Merchant
             }
             else if (choice == "2")
             {
-                // Buying the weapon upgrade arrives in ticket 05.
-                Console.WriteLine(messages.GetMessage("merchant_not_available"));
+                // Check for a weapon before paying, so Gold is never taken for nothing.
+                if (player.Weapon != null && TryPay(player, WeaponPrice, messages))
+                {
+                    player.Weapon.MakeMagical(WeaponDamageBonus);
+                    Console.WriteLine(messages.GetMessage("merchant_weapon_bought"));
+                    return;
+                }
             }
             else
             {

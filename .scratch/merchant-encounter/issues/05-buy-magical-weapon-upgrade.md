@@ -6,10 +6,10 @@
 
 **Status:** ready-for-agent
 
-- [ ] Buying the weapon upgrade with enough Gold deducts 120 Gold, raises Maximum Damage by 4, and returns to the path choice.
-- [ ] Trying to buy it without enough Gold shows the can't-afford message, leaves Gold unchanged, and asks again.
-- [ ] The weapon keeps its type and ASCII art after the upgrade.
-- [ ] The character stats and the combat stats show the weapon as magical, with the upgraded Maximum Damage.
-- [ ] The player's attack message names the weapon as magical.
-- [ ] Without the upgrade, weapon display and damage are unchanged.
-- [ ] New message keys exist in all four languages (the key-parity test passes).
+- [x] Buying the weapon upgrade with enough Gold deducts 120 Gold, raises Maximum Damage by 4, and returns to the path choice.
+- [x] Trying to buy it without enough Gold shows the can't-afford message, leaves Gold unchanged, and asks again.
+- [x] The weapon keeps its type and ASCII art after the upgrade.
+- [x] The character stats and the combat stats show the weapon as magical, with the upgraded Maximum Damage.
+- [x] The player's attack message names the weapon as magical.
+- [x] Without the upgrade, weapon display and damage are unchanged.
+- [x] New message keys exist in all four languages (the key-parity test passes).

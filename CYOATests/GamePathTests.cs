@@ -105,18 +105,82 @@ public class GamePathTests
         StringAssert.Contains(output, messages.GetMessage("merchant_farewell"));
     }
 
+    // Same rolls as DiceWith90Gold, but the gold roll (15) gives 150 Gold.
+    private static FixedDie DiceWith150Gold(params int[] combatRolls) =>
+        new FixedDie(new[] { 5, 6, 7, 15, 3, 12, 9, 15 }.Concat(combatRolls).ToArray());
+
     [TestMethod]
-    public void Merchant_WeaponIsNotAvailableYet_AndAsksAgain()
+    public void BuyingWeapon_WithEnoughGold_Deducts120_AndReturnsToPathChoice()
+    {
+        Messages messages = English();
+
+        // South, buy the weapon (ends the visit), south again to see the Gold, leave, exit.
+        string output = PlayGame(CreateCharacterInput + "s\n2\ns\n3\ne\n", DiceWith150Gold());
+
+        StringAssert.Contains(output, messages.GetMessage("merchant_weapon_bought"));
+        Assert.AreEqual(3, CountOccurrences(output, messages.GetMessage("path_prompt_full")),
+            "Buying should end the visit and return to the path choice.");
+        StringAssert.Contains(output, "You have 30 Gold."); // 150 - 120
+        StringAssert.Contains(output, messages.GetMessage("adventure_ends"));
+    }
+
+    [TestMethod]
+    public void BuyingWeapon_WithoutEnoughGold_ShowsCantAfford_KeepsGold_AndAsksAgain()
     {
         Messages messages = English();
 
         string output = PlayGame(CreateCharacterInput + "s\n2\n3\ne\n", DiceWith90Gold());
 
-        Assert.AreEqual(1, CountOccurrences(output, messages.GetMessage("merchant_not_available")));
-        // The menu is shown twice (before 2 and 3), each with unchanged Gold.
+        StringAssert.Contains(output, "The Merchant shakes their head. 'That costs 120 Gold, and you only have 90.'");
         Assert.AreEqual(2, CountOccurrences(output, "You have 90 Gold."),
-            "Choosing an item that isn't available yet should not change the player's Gold.");
+            "A failed purchase should leave Gold unchanged and show the menu again.");
+        Assert.IsFalse(output.Contains(messages.GetMessage("merchant_weapon_bought")));
         StringAssert.Contains(output, messages.GetMessage("merchant_farewell"));
+    }
+
+    [TestMethod]
+    public void AfterBuyingWeapon_CombatStatsAndAttack_ShowTheMagicalWeapon()
+    {
+        Messages messages = English();
+        // After character creation: the player's attack roll 20 misses (strength 18),
+        // the dragon's attack roll 20 misses (strength 5); then the player retreats.
+        string output = PlayGame(CreateCharacterInput + "s\n2\nn\na\nr\n", DiceWith150Gold(20, 20));
+
+        int combatStats = output.IndexOf(messages.GetMessage("combat_stats_header"), StringComparison.Ordinal);
+        Assert.IsTrue(combatStats >= 0, "The combat stats should be shown before the fight.");
+        string fight = output[combatStats..];
+        StringAssert.Contains(fight, "Weapon: magical long sword" + Environment.NewLine);
+        StringAssert.Contains(fight, "Weapon's Maximum Damage Points: 16" + Environment.NewLine); // 12 + 4
+        StringAssert.Contains(fight, "As a Fighter, you withdraw your magical long sword and attack the dragon.");
+        StringAssert.Contains(fight, "-)=====>" + Environment.NewLine); // the fighter's art is kept
+    }
+
+    [TestMethod]
+    public void WithoutBuyingWeapon_CombatStatsAndAttack_ShowTheOrdinaryWeapon()
+    {
+        Messages messages = English();
+        string output = PlayGame(CreateCharacterInput + "n\na\nr\n", DiceWith150Gold(20, 20));
+
+        string fight = output[output.IndexOf(messages.GetMessage("combat_stats_header"), StringComparison.Ordinal)..];
+        StringAssert.Contains(fight, "Weapon: long sword" + Environment.NewLine);
+        StringAssert.Contains(fight, "Weapon's Maximum Damage Points: 12" + Environment.NewLine);
+        StringAssert.Contains(fight, "As a Fighter, you withdraw your long sword and attack the dragon.");
+    }
+
+    [TestMethod]
+    public void CharacterStats_ShowTheMagicalWeapon_AndUpgradedDamage()
+    {
+        // The game only offers the stats summary before the adventure, so this calls it directly.
+        var output = new StringWriter();
+        Console.SetOut(output);
+        var weapon = new Weapon("dagger", 6, "-)==>");
+        weapon.MakeMagical(Merchant.WeaponDamageBonus);
+        var player = new Player { Name = "Bob", Weapon = weapon };
+
+        player.DisplayStats(English());
+
+        StringAssert.Contains(output.ToString(), "Weapon: magical dagger" + Environment.NewLine);
+        StringAssert.Contains(output.ToString(), "Weapon's Maximum Damage Points: 10" + Environment.NewLine);
     }
 
     [TestMethod]
