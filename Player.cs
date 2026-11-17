@@ -1,6 +1,12 @@
 public class Player
 {
-    private readonly Die _die = new Die();
+    private readonly Die _die;
+
+    // Pass a Die to control the rolls (e.g. in tests); without one, rolls are random.
+    public Player(Die? die = null)
+    {
+        _die = die ?? new Die();
+    }
 
     public string Name { get; set; } = "";
     public string Race { get; set; } = "";

@@ -110,6 +110,22 @@ public class DragonTests
     }
 
     [TestMethod]
+    public void Attack_WithFixedDice_DealsScriptedDamage()
+    {
+        // Dragon stats: strength 15, agility 10, health 10.
+        // Attack roll 5 hits (5 <= 15), block roll 18 fails (18 > agility 10), damage roll 7.
+        var die = new FixedDie(15, 10, 10, 5, 18, 7);
+        Dragon dragon = new Dragon(die);
+        Player player = new Player { Name = "TestHero", Agility = 10, HealthPoints = 30 };
+        Messages messages = GetMessages();
+
+        string result = dragon.Attack(player, messages);
+
+        Assert.AreEqual(23, player.HealthPoints);
+        StringAssert.Contains(result, string.Format(messages.GetMessage("dragon_damage_dealt"), dragon.Name, 7));
+    }
+
+    [TestMethod]
     public void Attack_KeepsPlayerHealthNonNegative()
     {
         Die die = new Die();

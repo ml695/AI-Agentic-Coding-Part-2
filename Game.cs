@@ -1,5 +1,13 @@
 public class Game
 {
+    private readonly Die _die;
+
+    // Pass a Die to control every roll in the game (e.g. in tests); without one, rolls are random.
+    public Game(Die? die = null)
+    {
+        _die = die ?? new Die();
+    }
+
     public void StartGame()
     {
         // Title screen
@@ -7,10 +15,7 @@ public class Game
         Console.WriteLine("Welcome to Choose Your Adventure Game");
         Console.WriteLine("=====================================\n");
 
-        // Instantiate Die first (per sequence diagram)
-        Die die = new Die();
-
-        Dragon dragon = new Dragon(die);
+        Dragon dragon = new Dragon(_die);
 
         // Language selection shown before Messages dictionary is loaded
         string selectedLanguage = PromptForLanguage();
@@ -34,7 +39,7 @@ public class Game
 
             if (choice == "1")
             {
-                Player player = new Player();
+                Player player = new Player(_die);
                 player.CreateCharacter(messages);
 
                 bool inAdventureMenu = true;
