@@ -112,6 +112,18 @@ public class CombatTests
     }
 
     [TestMethod]
+    public void GetCombatStatsDisplay_IncludesHealingPotionCount()
+    {
+        Player player = CreateTestPlayer();
+        player.HealingPotions = 2;
+        Combat combat = new Combat(player, CreateTestDragon(), CreateEnglishMessages());
+
+        string result = combat.GetCombatStatsDisplay();
+
+        StringAssert.Contains(result, "Healing Potions: 2" + Environment.NewLine);
+    }
+
+    [TestMethod]
     public void GetCombatStatsDisplay_IncludesDragonCombatStats()
     {
         Player player = CreateTestPlayer();

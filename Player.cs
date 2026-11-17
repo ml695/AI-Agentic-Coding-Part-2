@@ -15,7 +15,12 @@ public class Player
     public int Strength { get; set; }
     public int Agility { get; set; }
     public int HealthPoints { get; set; }
+
+    // Set to the Health Points rolled at character creation; healing never goes above it.
+    public int MaximumHealthPoints { get; set; }
+
     public int Gold { get; set; }
+    public int HealingPotions { get; set; }
 
     public Weapon? Weapon { get; set; }
 
@@ -130,6 +135,7 @@ public class Player
     {
         PromptRoll(messages.GetMessage("roll_health"), messages);
         HealthPoints = Math.Max(1, _die.Roll(20) + strengthModifier);
+        MaximumHealthPoints = HealthPoints;
     }
 
     // Gold is d20 x 10, giving 10-200.
@@ -164,7 +170,9 @@ public class Player
         Console.WriteLine(messages.GetMessage("stats_strength") + Strength);
         Console.WriteLine(messages.GetMessage("stats_agility") + Agility);
         Console.WriteLine(messages.GetMessage("stats_health") + HealthPoints);
+        Console.WriteLine(messages.GetMessage("stats_max_health") + MaximumHealthPoints);
         Console.WriteLine(messages.GetMessage("stats_gold") + Gold);
+        Console.WriteLine(messages.GetMessage("stats_healing_potions") + HealingPotions);
         Console.WriteLine(GetArmorStatLine(messages));
 
         if (Weapon != null)

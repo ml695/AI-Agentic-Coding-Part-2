@@ -283,6 +283,19 @@ public class GamePathTests
     }
 
     [TestMethod]
+    public void CharacterStats_ShowMaximumHealthAndHealingPotions()
+    {
+        // Same rolls as FixedDice_GiveRepeatableCharacterStats: health 9 + 3 = 12.
+        var die = new FixedDie(5, 6, 7, 15, 3, 12, 9, 4);
+
+        string input = CreateCharacterInput[..^2] + "1\n2\ne\n";
+        string output = PlayGame(input, die);
+
+        StringAssert.Contains(output, "Maximum Health Points: 12" + Environment.NewLine);
+        StringAssert.Contains(output, "Healing Potions: 0" + Environment.NewLine);
+    }
+
+    [TestMethod]
     public void GoldRoll_IsD20TimesTen_AndShownInStats()
     {
         Messages messages = English();

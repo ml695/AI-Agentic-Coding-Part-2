@@ -61,4 +61,23 @@ public class PlayerTests
 
         Assert.AreEqual(11, player.HealthPoints);
     }
+
+    [TestMethod]
+    [DoNotParallelize]
+    public void NewCharacter_MaximumHealthPoints_EqualsTheRolledHealth()
+    {
+        // Strength 10, modifier 3, agility 10, health 9 (9 + 3 = 12), gold 5.
+        Player player = CreateCharacter("human", new FixedDie(10, 3, 10, 9, 5));
+
+        Assert.AreEqual(12, player.MaximumHealthPoints);
+    }
+
+    [TestMethod]
+    [DoNotParallelize]
+    public void NewCharacter_StartsWithNoHealingPotions()
+    {
+        Player player = CreateCharacter("human", new FixedDie(10, 3, 10, 9, 5));
+
+        Assert.AreEqual(0, player.HealingPotions);
+    }
 }

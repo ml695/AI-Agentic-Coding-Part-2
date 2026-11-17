@@ -6,8 +6,8 @@
 
 **Status:** ready-for-agent
 
-- [ ] After character creation, Maximum HP equals the rolled HP (tested with fixed dice).
-- [ ] The character stats show Maximum HP and `Healing Potions: 0`.
-- [ ] The combat stats show the potion count.
-- [ ] Existing character-creation and combat tests still pass.
-- [ ] New message keys exist in all four languages (the key-parity test passes).
+- [x] After character creation, Maximum HP equals the rolled HP (tested with fixed dice).
+- [x] The character stats show Maximum HP and `Healing Potions: 0`.
+- [x] The combat stats show the potion count.
+- [x] Existing character-creation and combat tests still pass.
+- [x] New message keys exist in all four languages (the key-parity test passes).
