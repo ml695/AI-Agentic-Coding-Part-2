@@ -116,11 +116,12 @@ public class CombatTests
     {
         Player player = CreateTestPlayer();
         player.HealingPotions = 2;
-        Combat combat = new Combat(player, CreateTestDragon(), CreateEnglishMessages());
+        Messages messages = CreateEnglishMessages();
+        Combat combat = new Combat(player, CreateTestDragon(), messages);
 
         string result = combat.GetCombatStatsDisplay();
 
-        StringAssert.Contains(result, "Healing Potions: 2" + Environment.NewLine);
+        StringAssert.Contains(result, messages.GetMessage("stats_healing_potions") + 2 + Environment.NewLine);
     }
 
     [TestMethod]

@@ -172,8 +172,8 @@ public class Player
         Console.WriteLine(messages.GetMessage("stats_health") + HealthPoints);
         Console.WriteLine(messages.GetMessage("stats_max_health") + MaximumHealthPoints);
         Console.WriteLine(messages.GetMessage("stats_gold") + Gold);
-        Console.WriteLine(messages.GetMessage("stats_healing_potions") + HealingPotions);
         Console.WriteLine(GetArmorStatLine(messages));
+        Console.WriteLine(GetHealingPotionsStatLine(messages));
 
         if (Weapon != null)
         {
@@ -190,6 +190,12 @@ public class Player
             : messages.TranslateArmorForDisplay(Armor.Type);
 
         return messages.GetMessage("stats_armor") + armor;
+    }
+
+    // "Healing Potions: <count>"; shared by the character and combat stats.
+    public string GetHealingPotionsStatLine(Messages messages)
+    {
+        return messages.GetMessage("stats_healing_potions") + HealingPotions;
     }
 
     public int RollAttack()

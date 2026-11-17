@@ -58,7 +58,7 @@ public class Combat
         output.Add(messages.GetMessage("stats_agility") + player.Agility);
         output.Add(messages.GetMessage("stats_health") + player.HealthPoints);
         output.Add(player.GetArmorStatLine(messages));
-        output.Add(messages.GetMessage("stats_healing_potions") + player.HealingPotions);
+        output.Add(player.GetHealingPotionsStatLine(messages));
 
         if (player.Weapon != null)
         {
